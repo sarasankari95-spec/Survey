@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استبيان توفير الأدوية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('xwZJGGZWhY0t03OKo');</script>
+<style>
+  :root {
+    --green: #1a6b4a;
+    --green-light: #2d9b6e;
+    --green-soft: #e8f5ef;
+    --green-mid: #c0e8d4;
+    --cream: #f9f6f0;
+    --dark: #1a2a24;
+    --gray: #6b7c74;
+    --border: #c8dcd4;
+    --error: #c0392b;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -120px; left: -120px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(45,155,110,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px; right: -100px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(26,107,74,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: 0 4px 40px rgba(26,107,74,0.10), 0 1px 4px rgba(0,0,0,0.04);
+    max-width: 520px;
+    width: 100%;
+    overflow: hidden;
+    animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    padding: 36px 36px 28px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-icon {
+    width: 60px; height: 60px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+  }
+
+  .header h1 {
+    color: white;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .header p {
+    color: rgba(255,255,255,0.80);
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .secure-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.90);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  .form-body {
+    padding: 32px 36px 36px;
+  }
+
+  .field {
+    margin-bottom: 22px;
+    animation: fadeField 0.4s ease both;
+  }
+
+  .field:nth-child(1) { animation-delay: 0.1s }
+  .field:nth-child(2) { animation-delay: 0.18s }
+  .field:nth-child(3) { animation-delay: 0.26s }
+  .field:nth-child(4) { animation-delay: 0.34s }
+
+  @keyframes fadeField {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  label .required {
+    color: var(--green-light);
+    margin-right: 2px;
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    color: var(--dark);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    direction: rtl;
+  }
+
+  input[type="tel"] { direction: ltr; text-align: right; }
+
+  input:focus, textarea:focus {
+    border-color: var(--green-light);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(45,155,110,0.10);
+  }
+
+  input.error, textarea.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 4px rgba(192,57,43,0.08);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.7;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 5px;
+  }
+
+  .error-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 5px;
+    display: none;
+  }
+
+  .error-msg.show { display: block; }
+
+  /* Consent box */
+  .consent-box {
+    background: var(--green-soft);
+    border: 1.5px solid var(--green-mid);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 28px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: background 0.2s;
+    animation: fadeField 0.4s 0.42s ease both;
+  }
+
+  .consent-box:hover { background: #d8f0e5; }
+
+  .consent-box.error-border {
+    border-color: var(--error);
+    background: #fdf0ef;
+  }
+
+  .custom-check {
+    width: 22px; height: 22px;
+    min-width: 22px;
+    border: 2px solid var(--green);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    margin-top: 1px;
+    background: white;
+  }
+
+  .custom-check svg {
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  input[type="checkbox"]:checked ~ .consent-content .custom-check,
+  .consent-box.checked .custom-check {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .consent-box.checked .custom-check svg { opacity: 1; }
+
+  .consent-text {
+    font-size: 13.5px;
+    color: var(--dark);
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  .consent-text strong {
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .privacy-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #f0f7ff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 24px;
+    border: 1px solid #c8dff5;
+    animation: fadeField 0.4s 0.5s ease both;
+  }
+
+  .privacy-note span {
+    font-size: 12px;
+    color: #2c5f8a;
+    line-height: 1.65;
+  }
+
+  .privacy-note .lock-icon {
+    font-size: 16px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(26,107,74,0.28);
+    letter-spacing: 0.2px;
+    animation: fadeField 0.4s 0.56s ease both;
+  }
+
+  .submit-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(26,107,74,0.35);
+  }
+
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    padding: 52px 36px;
+    text-align: center;
+  }
+
+  .success-screen.show { display: block; }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    background: var(--green-soft);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 36px;
+    animation: popIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .success-screen h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+
+  .success-screen p {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.75;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .divider {
+    width: 40px; height: 3px;
+    background: var(--green-mid);
+    border-radius: 2px;
+    margin: 18px auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon"></div>
+    <h1>استبيان توفير الأدوية</h1>
+    <p>يُرجى تعبئة البيانات التالية بدقة</p>
+    <div class="secure-badge">بياناتك محمية وآمنة</div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-body" id="formSection">
+
+    <div class="field">
+      <label for="fullName">الاسم الكامل <span class="required">*</span></label>
+      <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" autocomplete="off">
+      <div class="error-msg" id="nameErr">يرجى إدخال الاسم الكامل</div>
+    </div>
+
+    <div class="field">
+      <label for="phone">رقم الجوال <span class="required">*</span></label>
+      <input type="tel" id="phone" placeholder="05XXXXXXXX" maxlength="10" autocomplete="off">
+      <div class="hint">أدخل رقم جوال سعودي مكوّن من 10 أرقام</div>
+      <div class="error-msg" id="phoneErr">يرجى إدخال رقم جوال صحيح (10 أرقام يبدأ بـ 05)</div>
+    </div>
+
+    <div class="field">
+      <label for="medicines">الأدوية التي تحتاج توفيرها <span class="required">*</span></label>
+      <textarea id="medicines" placeholder="اذكر أسماء الأدوية، كل دواء في سطر أو مفصول بفاصلة..."></textarea>
+      <div class="error-msg" id="medErr">يرجى ذكر الأدوية المطلوبة</div>
+    </div>
+
+    <!-- Privacy note -->
+    <div class="privacy-note">
+      <span class="lock-icon"></span>
+      <span>تُحفظ بياناتك بشكل آمن ولا تُشارك مع أي طرف ثالث. تُستخدم فقط للتواصل معك بخصوص توفير الأدوية.</span>
+    </div>
+
+    <!-- Consent -->
+    <div class="consent-box" id="consentBox" onclick="toggleConsent()">
+      <div class="custom-check" id="checkIcon">
+        <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+          <path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="consent-text">
+        <strong>موافقة مطلوبة:</strong> أوافق على استخدام بياناتي للتواصل معي بخصوص توفير الأدوية المطلوبة، وأقرّ بصحة المعلومات المدخلة.
+      </p>
+    </div>
+    <div class="error-msg" id="consentErr" style="margin-top:-18px; margin-bottom:18px;">يجب الموافقة على الشروط للمتابعة</div>
+
+    <button class="submit-btn" onclick="submitForm()">إرسال الطلب ←</button>
+  </div>
+
+  <!-- Success Screen -->
+  <div class="success-screen" id="successSection">
+    <div class="success-icon"></div>
+    <h2>تم إرسال طلبك بنجاح!</h2>
+    <div class="divider"></div>
+    <p>شكراً لك. سيتم التواصل معك قريباً على الرقم المُدخل بخصوص توفير الأدوية المطلوبة.</p>
+  </div>
+</div>
+
+<script>
+  let consentChecked = false;
+
+  function toggleConsent() {
+    consentChecked = !consentChecked;
+    const box = document.getElementById('consentBox');
+    const icon = document.getElementById('checkIcon');
+    if (consentChecked) {
+      box.classList.add('checked');
+      box.classList.remove('error-border');
+      document.getElementById('consentErr').classList.remove('show');
+    } else {
+      box.classList.remove('checked');
+    }
+  }
+
+  function setError(inputId, errId, show) {
+    const el = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (show) {
+      el.classList.add('error');
+      err.classList.add('show');
+    } else {
+      el.classList.remove('error');
+      err.classList.remove('show');
+    }
+  }
+
+  // Clear errors on input
+  ['fullName','phone','medicines'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() {
+      this.classList.remove('error');
+      const errId = id === 'fullName' ? 'nameErr' : id === 'phone' ? 'phoneErr' : 'medErr';
+      document.getElementById(errId).classList.remove('show');
+    });
+  });
+
+  function sanitize(str) {
+    return str.replace(/[<>"'&]/g, '').trim();
+  }
+
+  function submitForm() {
+    const name = sanitize(document.getElementById('fullName').value);
+    const phone = sanitize(document.getElementById('phone').value);
+    const meds = sanitize(document.getElementById('medicines').value);
+
+    let valid = true;
+
+    if (!name || name.length < 3) {
+      setError('fullName', 'nameErr', true); valid = false;
+    } else { setError('fullName', 'nameErr', false); }
+
+    const phoneRegex = /^05[0-9]{8}$/;
+    if (!phoneRegex.test(phone)) {
+      setError('phone', 'phoneErr', true); valid = false;
+    } else { setError('phone', 'phoneErr', false); }
+
+    if (!meds || meds.length < 2) {
+      setError('medicines', 'medErr', true); valid = false;
+    } else { setError('medicines', 'medErr', false); }
+
+    if (!consentChecked) {
+      document.getElementById('consentBox').classList.add('error-border');
+      document.getElementById('consentErr').classList.add('show');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Send via EmailJS
+    const btn = document.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'جارٍ الإرسال...';
+
+    const templateParams = {
+      from_name: name,
+      phone_number: phone,
+      medicines: meds,
+      to_email: 'sarah.sankari@drsulaimanalhabib.com'
+    };
+
+    emailjs.send('service_ugwkk6c', 'template_ye3cs4k', templateParams)
+      .then(() => {
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('successSection').classList.add('show');
+      })
+      .catch((error) => {
+        btn.disabled = false;
+        btn.textContent = 'إرسال الطلب ←';
+        alert('حدث خطأ أثناء الإرسال، يرجى المحاولة مرة أخرى.\n' + JSON.stringify(error));
+      });
+  }
+</script>
+</body>
+</html>
