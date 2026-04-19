@@ -1,0 +1,445 @@
+# Survey
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استبيان توفير الأدوية / Medicine Availability Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b4a;
+    --green-light: #2d9b6e;
+    --green-soft: #e8f5ef;
+    --green-mid: #c0e8d4;
+    --cream: #f9f6f0;
+    --dark: #1a2a24;
+    --gray: #6b7c74;
+    --border: #c8dcd4;
+    --error: #c0392b;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Tajawal', 'Inter', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: 0 4px 40px rgba(26,107,74,0.10), 0 1px 4px rgba(0,0,0,0.04);
+    max-width: 540px;
+    width: 100%;
+    overflow: hidden;
+    animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    padding: 30px 36px 26px;
+    text-align: center;
+  }
+
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .logo-icon {
+    width: 54px; height: 54px;
+    background: white;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+
+  .logo-icon svg { width: 32px; height: 32px; }
+
+  .logo-text { text-align: right; }
+  .logo-text .ar { color: white; font-size: 15px; font-weight: 800; line-height: 1.3; }
+  .logo-text .en { color: rgba(255,255,255,0.75); font-size: 11px; font-weight: 500; font-family: 'Inter', sans-serif; letter-spacing: 0.3px; }
+
+  .divider-line {
+    width: 1px; height: 40px;
+    background: rgba(255,255,255,0.3);
+  }
+
+  .header-titles { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 18px; }
+
+  .header-titles .ar-title {
+    color: white; font-size: 20px; font-weight: 800; margin-bottom: 4px;
+  }
+
+  .header-titles .en-title {
+    color: rgba(255,255,255,0.80); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; margin-bottom: 10px;
+  }
+
+  .header-titles .sub {
+    color: rgba(255,255,255,0.70); font-size: 12px;
+  }
+
+  .secure-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.90);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  /* FORM */
+  .form-body { padding: 28px 32px 32px; }
+
+  .field { margin-bottom: 20px; }
+
+  .label-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 7px;
+  }
+
+  .label-ar {
+    font-size: 14px; font-weight: 700; color: var(--dark);
+  }
+
+  .label-en {
+    font-size: 11px; font-weight: 500; color: var(--gray); font-family: 'Inter', sans-serif;
+  }
+
+  .required { color: var(--green-light); margin-right: 2px; }
+
+  input[type="text"], input[type="tel"], textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    color: var(--dark);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    direction: rtl;
+  }
+
+  input[type="tel"] { direction: ltr; text-align: right; }
+
+  input:focus, textarea:focus {
+    border-color: var(--green-light);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(45,155,110,0.10);
+  }
+
+  input.error, textarea.error {
+    border-color: var(--error);
+    box-shadow: 0 0 0 4px rgba(192,57,43,0.08);
+  }
+
+  textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
+
+  .hint { font-size: 11.5px; color: var(--gray); margin-top: 5px; }
+
+  .error-msg { font-size: 12px; color: var(--error); margin-top: 5px; display: none; }
+  .error-msg.show { display: block; }
+
+  .privacy-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #f0f7ff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: 1px solid #c8dff5;
+  }
+
+  .privacy-note .lock { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .privacy-note .note-text { font-size: 12px; color: #2c5f8a; line-height: 1.65; }
+  .privacy-note .note-text .en-note { font-family: 'Inter', sans-serif; font-size: 11px; color: #4a7fa5; margin-top: 2px; }
+
+  .consent-box {
+    background: var(--green-soft);
+    border: 1.5px solid var(--green-mid);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .consent-box:hover { background: #d8f0e5; }
+  .consent-box.error-border { border-color: var(--error); background: #fdf0ef; }
+
+  .custom-check {
+    width: 22px; height: 22px; min-width: 22px;
+    border: 2px solid var(--green);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    margin-top: 2px;
+    background: white;
+  }
+
+  .custom-check svg { opacity: 0; transition: opacity 0.15s; }
+  .consent-box.checked .custom-check { background: var(--green); border-color: var(--green); }
+  .consent-box.checked .custom-check svg { opacity: 1; }
+
+  .consent-text .ar-c { font-size: 13px; color: var(--dark); line-height: 1.7; }
+  .consent-text .en-c { font-size: 11px; color: var(--gray); font-family: 'Inter', sans-serif; line-height: 1.6; margin-top: 3px; }
+  .consent-text strong { font-weight: 700; color: var(--green); }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(26,107,74,0.28);
+  }
+
+  .submit-btn span.en-btn { font-family: 'Inter', sans-serif; font-size: 13px; opacity: 0.85; display: block; margin-top: 2px; font-weight: 500; }
+  .submit-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* SUCCESS */
+  .success-screen { display: none; padding: 48px 36px; text-align: center; }
+  .success-screen.show { display: block; }
+
+  .success-icon {
+    width: 80px; height: 80px;
+    background: var(--green-soft);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 36px;
+    animation: popIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .success-screen .ar-s { font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+  .success-screen .en-s { font-size: 14px; color: var(--gray); font-family: 'Inter', sans-serif; margin-bottom: 14px; }
+  .success-screen p { font-size: 13.5px; color: var(--gray); line-height: 1.75; max-width: 320px; margin: 0 auto 8px; }
+  .success-screen .en-p { font-family: 'Inter', sans-serif; font-size: 12px; }
+
+  .div-line { width: 40px; height: 3px; background: var(--green-mid); border-radius: 2px; margin: 14px auto; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-text">
+        <div class="ar">مستشفى سليمان الحبيب</div>
+        <div class="en">Dr. Sulaiman Al Habib Hospital</div>
+      </div>
+      <div class="divider-line"></div>
+      <div class="logo-icon">
+        <!-- Medical cross logo -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="15" y="4" width="10" height="32" rx="3" fill="#1a6b4a"/>
+          <rect x="4" y="15" width="32" height="10" rx="3" fill="#1a6b4a"/>
+          <rect x="16" y="5" width="8" height="30" rx="2" fill="#2d9b6e"/>
+          <rect x="5" y="16" width="30" height="8" rx="2" fill="#2d9b6e"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header-titles">
+      <div class="ar-title">استبيان توفير الأدوية</div>
+      <div class="en-title">Medicine Availability Survey</div>
+      <div class="sub">يُرجى تعبئة البيانات التالية بدقة &nbsp;|&nbsp; Please fill in the details below</div>
+      <div class="secure-badge">🔒 بياناتك محمية &nbsp;|&nbsp; Your data is secure</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-body" id="formSection">
+
+    <div class="field">
+      <div class="label-wrap">
+        <span class="label-ar">الاسم الكامل <span class="required">*</span></span>
+        <span class="label-en">Full Name</span>
+      </div>
+      <input type="text" id="fullName" placeholder="أدخل اسمك الكامل / Enter your full name" autocomplete="off">
+      <div class="error-msg" id="nameErr">يرجى إدخال الاسم الكامل / Please enter your full name</div>
+    </div>
+
+    <div class="field">
+      <div class="label-wrap">
+        <span class="label-ar">رقم الجوال <span class="required">*</span></span>
+        <span class="label-en">Mobile Number</span>
+      </div>
+      <input type="tel" id="phone" placeholder="05XXXXXXXX" maxlength="10" autocomplete="off">
+      <div class="hint">رقم سعودي مكوّن من 10 أرقام يبدأ بـ 05 &nbsp;|&nbsp; 10-digit Saudi number starting with 05</div>
+      <div class="error-msg" id="phoneErr">يرجى إدخال رقم جوال صحيح / Please enter a valid mobile number</div>
+    </div>
+
+    <div class="field">
+      <div class="label-wrap">
+        <span class="label-ar">الأدوية المطلوبة <span class="required">*</span></span>
+        <span class="label-en">Required Medicines</span>
+      </div>
+      <textarea id="medicines" placeholder="اذكر أسماء الأدوية / List the medicine names..."></textarea>
+      <div class="error-msg" id="medErr">يرجى ذكر الأدوية المطلوبة / Please list the required medicines</div>
+    </div>
+
+    <div class="privacy-note">
+      <span class="lock">🔒</span>
+      <div class="note-text">
+        <div>تُحفظ بياناتك بشكل آمن ولا تُشارك مع أي طرف ثالث.</div>
+        <div class="en-note">Your data is stored securely and will not be shared with any third party.</div>
+      </div>
+    </div>
+
+    <div class="consent-box" id="consentBox" onclick="toggleConsent()">
+      <div class="custom-check" id="checkIcon">
+        <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+          <path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="consent-text">
+        <div class="ar-c"><strong>موافقة مطلوبة:</strong> أوافق على استخدام بياناتي للتواصل معي بخصوص توفير الأدوية.</div>
+        <div class="en-c"><strong>Consent Required:</strong> I agree to the use of my data to be contacted regarding medicine availability.</div>
+      </div>
+    </div>
+    <div class="error-msg" id="consentErr" style="margin-top:-18px; margin-bottom:18px;">يجب الموافقة على الشروط / Consent is required</div>
+
+    <button class="submit-btn" onclick="submitForm()">
+      إرسال الطلب
+      <span class="en-btn">Submit Request</span>
+    </button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-screen" id="successSection">
+    <div class="success-icon">✅</div>
+    <div class="ar-s">تم إرسال طلبك بنجاح!</div>
+    <div class="en-s">Your request has been submitted successfully!</div>
+    <div class="div-line"></div>
+    <p>سيتم التواصل معك قريباً على الرقم المُدخل بخصوص توفير الأدوية المطلوبة.</p>
+    <p class="en-p">You will be contacted shortly at the provided number regarding your medicine request.</p>
+  </div>
+
+</div>
+
+<script>
+  let consentChecked = false;
+
+  function toggleConsent() {
+    consentChecked = !consentChecked;
+    const box = document.getElementById('consentBox');
+    if (consentChecked) {
+      box.classList.add('checked');
+      box.classList.remove('error-border');
+      document.getElementById('consentErr').classList.remove('show');
+    } else {
+      box.classList.remove('checked');
+    }
+  }
+
+  function setError(inputId, errId, show) {
+    const el = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (show) { el.classList.add('error'); err.classList.add('show'); }
+    else { el.classList.remove('error'); err.classList.remove('show'); }
+  }
+
+  ['fullName','phone','medicines'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() {
+      this.classList.remove('error');
+      const errId = id === 'fullName' ? 'nameErr' : id === 'phone' ? 'phoneErr' : 'medErr';
+      document.getElementById(errId).classList.remove('show');
+    });
+  });
+
+  function sanitize(str) {
+    return str.replace(/[<>"'&]/g, '').trim();
+  }
+
+  function submitForm() {
+    const name = sanitize(document.getElementById('fullName').value);
+    const phone = sanitize(document.getElementById('phone').value);
+    const meds = sanitize(document.getElementById('medicines').value);
+    let valid = true;
+
+    if (!name || name.length < 3) { setError('fullName', 'nameErr', true); valid = false; }
+    else { setError('fullName', 'nameErr', false); }
+
+    if (!/^05[0-9]{8}$/.test(phone)) { setError('phone', 'phoneErr', true); valid = false; }
+    else { setError('phone', 'phoneErr', false); }
+
+    if (!meds || meds.length < 2) { setError('medicines', 'medErr', true); valid = false; }
+    else { setError('medicines', 'medErr', false); }
+
+    if (!consentChecked) {
+      document.getElementById('consentBox').classList.add('error-border');
+      document.getElementById('consentErr').classList.add('show');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    const btn = document.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'جارٍ الإرسال... / Submitting...';
+
+    fetch('https://formspree.io/f/mvzdqpra', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ الاسم: name, الجوال: phone, الأدوية: meds })
+    })
+    .then(res => {
+      if (res.ok) {
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('successSection').classList.add('show');
+      } else { throw new Error(); }
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.innerHTML = 'إرسال الطلب<span class="en-btn">Submit Request</span>';
+      alert('حدث خطأ أثناء الإرسال / Submission failed. Please try again.');
+    });
+  }
+</script>
+</body>
+</html>
